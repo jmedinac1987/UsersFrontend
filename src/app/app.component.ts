@@ -14,10 +14,9 @@ import { MessageService } from 'primeng/api';
 export class AppComponent implements OnInit, OnDestroy {
   public subscription?: Subscription;
   public titleDialog: string = '';
-  public users: User[] = [];  
+  public users: User[] = [];
   public user: User = {} as User;
   public loading: boolean = true;
-  public search?: string;
   public usertDialog: boolean = false;
   public submitted: boolean = false;
   public messages = {
@@ -45,45 +44,27 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.subscription) this.subscription.unsubscribe();
   }
 
-  openNew() {
+  openDialogNewUser() {
     this.usertDialog = true;
     this.submitted = false;
     this.titleDialog = 'Add user';
   }
 
-  hideDialog() {
+  hideDialogNewUser() {
     this.usertDialog = false;
     this.submitted = false;
     this.titleDialog = '';
-    this.user = {} as User;    
+    this.user = {} as User;
   }
 
   getEventValue($event: any): string {
     return $event.target.value;
   }
 
-  messageServiceWarning(message: string) {
+  messageServiceUser(severity: string, summary: string, message: string) {
     this.messageService.add({
-      severity: 'warn',
-      summary: 'Warning',
-      detail: message,
-      life: 3000,
-    });
-  }
-
-  messageServiceError(message: string) {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: message,
-      life: 3000,
-    });
-  }
-
-  messageServiceSuccess(message: string) {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
+      severity: severity,
+      summary: summary,
       detail: message,
       life: 3000,
     });
@@ -91,71 +72,85 @@ export class AppComponent implements OnInit, OnDestroy {
 
   getUsers() {
     this.subscription = this.userService.getUsers().subscribe({
-      next: (resp) => this.users = resp.Response,
+      next: (resp) => (this.users = resp.Response),
       error: (error) => {
-        this.messageServiceError(this.messages.ErrorGetUsers);
+        this.messageServiceUser('error', 'Error', this.messages.ErrorGetUsers);
         this.loading = false;
       },
       complete: () => (this.loading = false),
     });
   }
 
-  saveUser(user: User) {
+  saveUserButton(user: User) {
     this.submitted = true;
 
     if (Object.keys(user).length < 6) {
-      this.messageServiceWarning(this.messages.ErrorRequiredFields);
+      this.messageServiceUser('warn','Warning',this.messages.ErrorRequiredFields);
       return;
     }
 
-    if (!user.User || !user.Password || !user.Role || !user.App ||
-      !user.Environment || !user.Url) 
-    {
-      this.messageServiceWarning(this.messages.ErrorRequiredFields);
+    if ( !user.User ||!user.Password ||!user.Role ||!user.App ||!user.Environment ||!user.Url) {
+      this.messageServiceUser('warn','Warning',this.messages.ErrorRequiredFields);
       return;
     }
 
     if (this.titleDialog.toLowerCase().includes('add')) {
-      this.subscription = this.userService.addUser(user).subscribe({
-        next: (resp) => {
-          this.messageServiceSuccess(this.messages.SuccessfulAdd);
-          this.usertDialog = false;
-          this.user = {} as User;
-        },
-        error: (error) => {
-          this.messageServiceError(this.messages.ErrorAdd);
-          this.usertDialog = false;
-          this.user = {} as User;
-        },
-
-        complete: () => this.getUsers(),
-      });
-
+      this.addUser(user);
       return;
-    } else {
-      this.subscription = this.userService.putUser(user).subscribe({
-        next: (resp) => {
-          this.messageServiceSuccess(this.messages.SuccessfulEdit);
-          this.usertDialog = false;
-          this.user = {} as User;
-        },
-        error: (error) => {
-          this.messageServiceError(this.messages.ErrorEdit);
-          this.usertDialog = false;
-          this.user = {} as User;
-        },
-        complete: () => this.getUsers(),
-      });
+    }
 
+    if (this.titleDialog.toLowerCase().includes('edit')) {
+      this.updateUser(user);
       return;
     }
   }
 
-  editUser(user: User) {
+  editUserButton(user: User) {
     this.usertDialog = true;
     this.submitted = false;
     this.titleDialog = 'Edit user';
-    this.user = {...user};//the data is passed but not the object as such so that when editing and canceling it does not alter the original data of the grid
+    this.user = { ...user }; //the data is passed but not the object as such so that when editing and canceling it does not alter the original data of the grid
+  }
+
+  addUser(user: User) {
+    this.subscription = this.userService.addUser(user).subscribe({
+      next: (resp) => {
+        this.messageServiceUser(
+          'success',
+          'Successful',
+          this.messages.SuccessfulAdd
+        );
+        this.usertDialog = false;
+        this.user = {} as User;
+      },
+      error: (error) => {
+        this.messageServiceUser('error', 'Error', this.messages.ErrorAdd);
+        this.usertDialog = false;
+        this.user = {} as User;
+      },
+
+      complete: () => this.getUsers(),
+    });
+  }
+
+  updateUser(user: User) {
+    this.subscription = this.userService.putUser(user).subscribe({
+      next: (resp) => {
+        this.messageServiceUser(
+          'success',
+          'Successful',
+          this.messages.SuccessfulEdit
+        );
+        this.usertDialog = false;
+        this.user = {} as User;
+      },
+      error: (error) => {
+        this.messageServiceUser('error', 'Error', this.messages.ErrorEdit);
+        this.usertDialog = false;
+        this.user = {} as User;
+      },
+      complete: () => this.getUsers(),
+    });
   }
 
   deleteUser(user: User) {
@@ -166,8 +161,17 @@ export class AppComponent implements OnInit, OnDestroy {
       accept: () => {
         this.subscription = this.userService.deleteUser(user.id).subscribe({
           next: (resp) =>
-            this.messageServiceSuccess(this.messages.SuccessfulDelete),
-          error: (error) => this.messageServiceError(this.messages.ErrorDelete),
+            this.messageServiceUser(
+              'success',
+              'Successful',
+              this.messages.SuccessfulDelete
+            ),
+          error: (error) =>
+            this.messageServiceUser(
+              'error',
+              'Error',
+              this.messages.ErrorDelete
+            ),
           complete: () => this.getUsers(),
         });
       },
