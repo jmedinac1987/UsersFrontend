@@ -117,7 +117,7 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && !user.User"
+      <small class="p-error" *ngIf="submitted && (!user.User || user.User.trim() == '')"
         >User is required.</small
       >
     </div>
@@ -131,7 +131,7 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && !user.Password"
+      <small class="p-error" *ngIf="submitted && (!user.Password || user.Password.trim() == '')"
         >Password is required.</small
       >
     </div>
@@ -145,7 +145,7 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && !user.Role"
+      <small class="p-error" *ngIf="submitted && (!user.Role || user.Role.trim() == '')"
         >Role is required.</small
       >
     </div>
@@ -159,7 +159,7 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && !user.App"
+      <small class="p-error" *ngIf="submitted && (!user.App || user.App.trim() == '')"
         >App is required.</small
       >
     </div>
@@ -173,7 +173,7 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && !user.Environment"
+      <small class="p-error" *ngIf="submitted && (!user.Environment || user.Environment.trim() == '')"
         >Environment is required.</small
       >
     </div>
@@ -187,8 +187,8 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && !user.Url"
-        >Environment is required.</small
+      <small class="p-error" *ngIf="submitted && (!user.Url || user.Url.trim() == '')"
+        >Url is required.</small
       >
     </div>
   </ng-template>

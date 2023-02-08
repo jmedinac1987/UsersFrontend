@@ -89,7 +89,9 @@ export class AppComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if ( !user.User ||!user.Password ||!user.Role ||!user.App ||!user.Environment ||!user.Url) {
+    if ( !user.User ||!user.Password ||!user.Role ||!user.App ||!user.Environment ||!user.Url ||
+         user.User.trim() == "" || user.Password.trim() == "" || user.Role.trim() == "" || user.App.trim() == "" 
+         || user.Environment.trim() == "" || user.Url.trim() == "" ) {
       this.messageServiceUser('warn','Warning',this.messages.ErrorRequiredFields);
       return;
     }
