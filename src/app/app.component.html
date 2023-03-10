@@ -15,7 +15,7 @@
       ></button>
       <span class="p-input-icon-right">
         <i class="pi pi-search"></i>
-        <input          
+        <input
           pInputText
           type="text"
           (input)="dt.filterGlobal(getEventValue($event), 'contains')"
@@ -35,7 +35,14 @@
     [loading]="loading"
     [paginator]="true"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [globalFilterFields]="['User', 'Password', 'Role', 'App', 'Environment','Url']"
+    [globalFilterFields]="[
+      'User',
+      'Password',
+      'Role',
+      'App',
+      'Environment',
+      'Url'
+    ]"
     [rowHover]="true"
     styleClass="p-datatable-gridlines"
   >
@@ -65,12 +72,21 @@
 
     <ng-template pTemplate="body" let-user>
       <tr>
-        <td>{{ user.User }}</td>
-        <td>{{ user.Password }}</td>
+        <td>
+          <i class="pi pi-copy" (click)="clipboard(user.User)"></i>
+          {{ user.User }}
+        </td>
+        <td>
+          <i class="pi pi-copy" (click)="clipboard(user.Password)"></i>
+          {{ user.Password }}
+        </td>
         <td>{{ user.Role }}</td>
         <td>{{ user.App }}</td>
         <td>{{ user.Environment }}</td>
-        <td>{{ user.Url }}</td>
+        <td>
+          <i class="pi pi-copy" (click)="clipboard(user.Url)"></i>
+          {{ user.Url }}
+        </td>
         <td>
           <button
             pButton
@@ -117,7 +133,9 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && (!user.User || user.User.trim() == '')"
+      <small
+        class="p-error"
+        *ngIf="submitted && (!user.User || user.User.trim() == '')"
         >User is required.</small
       >
     </div>
@@ -131,7 +149,9 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && (!user.Password || user.Password.trim() == '')"
+      <small
+        class="p-error"
+        *ngIf="submitted && (!user.Password || user.Password.trim() == '')"
         >Password is required.</small
       >
     </div>
@@ -145,7 +165,9 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && (!user.Role || user.Role.trim() == '')"
+      <small
+        class="p-error"
+        *ngIf="submitted && (!user.Role || user.Role.trim() == '')"
         >Role is required.</small
       >
     </div>
@@ -159,7 +181,9 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && (!user.App || user.App.trim() == '')"
+      <small
+        class="p-error"
+        *ngIf="submitted && (!user.App || user.App.trim() == '')"
         >App is required.</small
       >
     </div>
@@ -173,7 +197,11 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && (!user.Environment || user.Environment.trim() == '')"
+      <small
+        class="p-error"
+        *ngIf="
+          submitted && (!user.Environment || user.Environment.trim() == '')
+        "
         >Environment is required.</small
       >
     </div>
@@ -187,7 +215,9 @@
         required
         autofocus
       />
-      <small class="p-error" *ngIf="submitted && (!user.Url || user.Url.trim() == '')"
+      <small
+        class="p-error"
+        *ngIf="submitted && (!user.Url || user.Url.trim() == '')"
         >Url is required.</small
       >
     </div>

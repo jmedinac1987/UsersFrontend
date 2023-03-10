@@ -28,6 +28,8 @@ export class AppComponent implements OnInit, OnDestroy {
     ErrorRequiredFields: 'Required fields without filling out',
     ErrorEdit: 'An error occurred during the update process 🥺',
     ErrorDelete: 'An error occurred during the deletion process 🥺',
+    Copy: 'Copied to clipboard',
+    ErrorCpy: 'Information was not copied to the clipboard',
   };
 
   constructor(
@@ -85,14 +87,33 @@ export class AppComponent implements OnInit, OnDestroy {
     this.submitted = true;
 
     if (Object.keys(user).length < 6) {
-      this.messageServiceUser('warn','Warning',this.messages.ErrorRequiredFields);
+      this.messageServiceUser(
+        'warn',
+        'Warning',
+        this.messages.ErrorRequiredFields
+      );
       return;
     }
 
-    if ( !user.User ||!user.Password ||!user.Role ||!user.App ||!user.Environment ||!user.Url ||
-         user.User.trim() == "" || user.Password.trim() == "" || user.Role.trim() == "" || user.App.trim() == "" 
-         || user.Environment.trim() == "" || user.Url.trim() == "" ) {
-      this.messageServiceUser('warn','Warning',this.messages.ErrorRequiredFields);
+    if (
+      !user.User ||
+      !user.Password ||
+      !user.Role ||
+      !user.App ||
+      !user.Environment ||
+      !user.Url ||
+      user.User.trim() == '' ||
+      user.Password.trim() == '' ||
+      user.Role.trim() == '' ||
+      user.App.trim() == '' ||
+      user.Environment.trim() == '' ||
+      user.Url.trim() == ''
+    ) {
+      this.messageServiceUser(
+        'warn',
+        'Warning',
+        this.messages.ErrorRequiredFields
+      );
       return;
     }
 
@@ -178,5 +199,27 @@ export class AppComponent implements OnInit, OnDestroy {
         });
       },
     });
+  }
+
+  clipboard(userOrPassword: string) {
+    console.log(userOrPassword);
+    if (userOrPassword) {
+      navigator.clipboard
+        .writeText(userOrPassword.trim())
+        .then((data) =>
+          this.messageServiceUser(
+            'info',
+            'Information',
+            this.messages.Copy
+          )
+        )
+        .catch((error) => {
+          this.messageServiceUser(
+            'error',
+            'Error',
+            this.messages.ErrorDelete
+          );
+        });
+    }
   }
 }

@@ -2,4 +2,9 @@
     margin-right: 5px;
 }
 
+i:hover{
+    cursor: pointer;
+    background-color: darkgrey;    
+    border-radius: 9.5px;
+}
 
