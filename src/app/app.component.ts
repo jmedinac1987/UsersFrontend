@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../app/services/users.service';
 import { Subscription } from 'rxjs';
-import { User } from './interfaces/user';
+import { User } from './interfaces/User';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { FilterService } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public subscription?: Subscription;
   public titleDialog: string = '';
   public users: User[] = [];
-  public user: User = {} as User;
+  public user: User = {} as User;  
   public loading: boolean = true;
   public usertDialog: boolean = false;
   public submitted: boolean = false;
@@ -29,13 +30,16 @@ export class AppComponent implements OnInit, OnDestroy {
     ErrorEdit: 'An error occurred during the update process 🥺',
     ErrorDelete: 'An error occurred during the deletion process 🥺',
     Copy: 'Copied to clipboard',
-    ErrorCpy: 'Information was not copied to the clipboard',
+    ErrorCopy: 'Information was not copied to the clipboard',
   };
+  public cols?: any[];
+  public exportColumns?: any[];
 
   constructor(
     private userService: UserService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private filterService: FilterService
   ) {}
 
   ngOnInit() {
@@ -59,9 +63,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.user = {} as User;
   }
 
-  getEventValue($event: any): string {
+  getEventValue($event: any): string {        
     return $event.target.value;
-  }
+  }  
 
   messageServiceUser(severity: string, summary: string, message: string) {
     this.messageService.add({
@@ -217,7 +221,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.messageServiceUser(
             'error',
             'Error',
-            this.messages.ErrorDelete
+            this.messages.ErrorCopy
           );
         });
     }

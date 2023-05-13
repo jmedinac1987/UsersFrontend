@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
-import { ApiResponse } from '../interfaces/apiResponse';
-import { User } from '../interfaces/user';
+import { ApiResponse } from '../interfaces/ApiResponse';
+import { User } from '../interfaces/User';
 
 
 @Injectable({
