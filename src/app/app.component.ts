@@ -5,6 +5,7 @@ import { User } from './interfaces/User';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { FilterService } from 'primeng/api';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-root',
@@ -225,5 +226,9 @@ export class AppComponent implements OnInit, OnDestroy {
           );
         });
     }
+  }
+
+  clear(table: Table) {
+    table.clear();
   }
 }

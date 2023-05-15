@@ -7,6 +7,13 @@
     <ng-template pTemplate="right">
       <button
         pButton
+        label="Clear"
+        class="p-button-outlined right-margin-button"
+        icon="pi pi-filter-slash"
+        (click)="clear(dt)"
+      ></button>
+      <button
+        pButton
         pRipple
         label="Add"
         icon="pi pi-plus"
