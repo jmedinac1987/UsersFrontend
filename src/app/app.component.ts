@@ -207,7 +207,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   clipboard(userOrPassword: string) {
-    console.log(userOrPassword);
+    
     if (userOrPassword) {
       navigator.clipboard
         .writeText(userOrPassword.trim())
